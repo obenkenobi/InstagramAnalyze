@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: Instagram Unfollow
+
+  jackson:
+    serialization:
+      indent_output: true
+
+  mvc:
+    favicon:
+      enabled: false

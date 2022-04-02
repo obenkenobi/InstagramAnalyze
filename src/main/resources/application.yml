@@ -1,0 +1,39 @@
+info:
+    description: Instagram Unfollow
+
+server:
+  port: 4269
+
+spring:
+  main:
+    web-application-type: none
+  jpa:
+    database-platform: com.nero.socialmedia.analysis.instagram.configuration.dialect.SQLDialect
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:sqlite:sqlitesample.db
+    driver-class-name: org.sqlite.JDBC
+    username: sa
+    password: sa
+  sql:
+    init:
+      mode: always
+
+settings:
+  googleDriveUsername:
+    fieldName: google-drive-username
+    multiple: false
+  googleDrivePassword:
+    fieldName: google-drive-password
+    multiple: false
+  googleDriveFilepath:
+    fieldName: google-drive-filepath
+    multiple: false
+  instagramAccountsToTrack:
+    fieldName: instagram-accounts-to-track
+    multiple: true
+
+gui:
+  title: Instagram Analyze
+
