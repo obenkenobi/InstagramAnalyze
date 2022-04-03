@@ -36,4 +36,9 @@ settings:
 
 gui:
   title: Instagram Analyze
+tray:
+  openMenuItemLabel: Open
+  exitMenuItemLabel: Exit
+  iconPath: /icons/tray.png
+  tooltip: Running instagram analyze application
 

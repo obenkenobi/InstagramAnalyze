@@ -1,53 +1,57 @@
 package com.nero.socialmedia.analysis.instagram.tray;
 
+import com.nero.socialmedia.analysis.instagram.StageInitializer;
+import com.nero.socialmedia.analysis.instagram.configuration.TrayConfiguration;
 import com.nero.socialmedia.analysis.instagram.utils.AppLifeCycleUtils;
 import javafx.application.Platform;
-import javafx.stage.Stage;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
 @Slf4j
+@Component
 public class CustomTrayIcon extends TrayIcon {
-    private static final String IMAGE_PATH = "/icons/tray.png";
-    private static final String TOOLTIP = "Running instagram analyze application";
-    private static final String CONFIG_OPEN_LINK = "http://localhost:4269/configuration";
+    private final ConfigurableApplicationContext applicationContext;
+    private final StageInitializer stageInitializer;
+    private final TrayConfiguration trayConfiguration;
 
     private final PopupMenu popup;
     @Getter
     private final SystemTray tray;
-    private final ConfigurableApplicationContext applicationContext;
-    private final Stage stage;
 
-    public CustomTrayIcon(ConfigurableApplicationContext applicationContext, Stage stage) {
-        super(createImage(IMAGE_PATH, TOOLTIP), TOOLTIP);
-        popup = new PopupMenu();
-        tray = SystemTray.getSystemTray();
+    public CustomTrayIcon(@Autowired ConfigurableApplicationContext applicationContext,
+                          @Autowired StageInitializer stageInitializer,
+                          @Autowired TrayConfiguration trayConfiguration) {
+        super(createImage(trayConfiguration.getIconPath(), trayConfiguration.getTooltip()),
+                trayConfiguration.getTooltip());
+        this.trayConfiguration = trayConfiguration;
         this.applicationContext = applicationContext;
-        this.stage = stage;
+        this.stageInitializer = stageInitializer;
+
+        this.popup = new PopupMenu();
+        this.tray = SystemTray.getSystemTray();
         try {
-            setup();
+            setupTray();
         } catch (AWTException e) {
             e.printStackTrace();
         }
     }
 
-    @PostConstruct
-    private void setup() throws AWTException {
+    private void setupTray() throws AWTException {
         // Create a pop-up menu components
-        MenuItem exitItem = new MenuItem("Exit");
+        MenuItem exitItem = new MenuItem(trayConfiguration.getExitMenuItemLabel());
         exitItem.addActionListener(e -> AppLifeCycleUtils.exit(applicationContext, this));
 
-        MenuItem linkItem = new MenuItem("Open");
-        linkItem.addActionListener(e -> openConfigurationGui());
+        MenuItem openItem = new MenuItem(trayConfiguration.getOpenMenuItemLabel());
+        openItem.addActionListener(e -> openConfigurationGui());
 
-        popup.add(linkItem);
+        popup.add(openItem);
         popup.addSeparator();
         popup.add(exitItem);
         setPopupMenu(popup);
@@ -66,10 +70,6 @@ public class CustomTrayIcon extends TrayIcon {
     }
 
     private void openConfigurationGui() {
-        try {
-            Platform.runLater(this.stage::show);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Platform.runLater(() -> stageInitializer.getStage().show());
     }
 }
