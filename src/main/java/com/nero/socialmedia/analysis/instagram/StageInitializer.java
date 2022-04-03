@@ -3,6 +3,8 @@ package com.nero.socialmedia.analysis.instagram;
 import com.nero.socialmedia.analysis.instagram.configuration.GuiConfiguration;
 import com.nero.socialmedia.analysis.instagram.events.StageReadyEvent;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +32,11 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
-        stage = event.getStage();
-        setupStage(stage);
-//        new CustomTrayIcon(appContext, stage);
-    }
+//        Parent parent;
 
-    private void setupStage(Stage stage) {
+        stage = event.getStage();
         stage.setTitle(guiConfiguration.getTitle());
+//        stage.setScene(new Scene(parent, 800,800));
         stage.show();
     }
 }

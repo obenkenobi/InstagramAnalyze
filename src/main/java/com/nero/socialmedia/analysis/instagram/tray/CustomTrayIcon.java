@@ -2,22 +2,26 @@ package com.nero.socialmedia.analysis.instagram.tray;
 
 import com.nero.socialmedia.analysis.instagram.StageInitializer;
 import com.nero.socialmedia.analysis.instagram.configuration.TrayConfiguration;
+import com.nero.socialmedia.analysis.instagram.services.ResourceService;
 import com.nero.socialmedia.analysis.instagram.utils.AppLifeCycleUtils;
 import javafx.application.Platform;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 
 @Slf4j
 @Component
 public class CustomTrayIcon extends TrayIcon {
     private final ConfigurableApplicationContext applicationContext;
+    private final ResourceService resourceService;
     private final StageInitializer stageInitializer;
     private final TrayConfiguration trayConfiguration;
 
@@ -26,10 +30,12 @@ public class CustomTrayIcon extends TrayIcon {
     private final SystemTray tray;
 
     public CustomTrayIcon(@Autowired ConfigurableApplicationContext applicationContext,
+                          @Autowired ResourceService resourceService,
                           @Autowired StageInitializer stageInitializer,
                           @Autowired TrayConfiguration trayConfiguration) {
-        super(createImage(trayConfiguration.getIconPath(), trayConfiguration.getTooltip()),
+        super(createImage(resourceService.getTrayIconResource(), trayConfiguration.getTooltip()),
                 trayConfiguration.getTooltip());
+        this.resourceService = resourceService;
         this.trayConfiguration = trayConfiguration;
         this.applicationContext = applicationContext;
         this.stageInitializer = stageInitializer;
@@ -58,14 +64,14 @@ public class CustomTrayIcon extends TrayIcon {
         tray.add(this);
     }
 
-    private static Image createImage(String path, String description) {
-        URL imageURL = CustomTrayIcon.class.getResource(path);
-        if (imageURL == null) {
-            String errorMsg = "Failed Creating Image. Resource not found: " + path;
+    private static Image createImage(Resource imageResource, String description) {
+        try {
+            URL imageURL = imageResource.getURL();
+            return new ImageIcon(imageURL, description).getImage();
+        } catch (IOException e) {
+            String errorMsg = "Failed Creating Image. Resource not found: " + imageResource.getFilename();
             log.error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
-        } else {
-            return new ImageIcon(imageURL, description).getImage();
         }
     }
 

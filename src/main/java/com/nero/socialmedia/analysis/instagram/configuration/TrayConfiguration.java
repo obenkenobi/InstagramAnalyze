@@ -12,6 +12,5 @@ import org.springframework.stereotype.Component;
 public class TrayConfiguration {
     private String openMenuItemLabel;
     private String exitMenuItemLabel;
-    private String iconPath;
     private String tooltip;
 }

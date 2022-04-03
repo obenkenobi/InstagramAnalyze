@@ -39,6 +39,5 @@ gui:
 tray:
   openMenuItemLabel: Open
   exitMenuItemLabel: Exit
-  iconPath: /icons/tray.png
   tooltip: Running instagram analyze application
 
