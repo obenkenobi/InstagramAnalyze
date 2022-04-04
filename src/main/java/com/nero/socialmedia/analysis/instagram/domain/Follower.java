@@ -5,8 +5,8 @@ import javax.persistence.*;
 @Entity(name = "follower")
 public class Follower {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "follower_account_name", nullable = false)

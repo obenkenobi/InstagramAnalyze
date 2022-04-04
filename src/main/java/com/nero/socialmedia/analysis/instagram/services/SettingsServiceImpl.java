@@ -2,14 +2,12 @@ package com.nero.socialmedia.analysis.instagram.services;
 
 import com.nero.socialmedia.analysis.instagram.configuration.SettingsConfiguration;
 import com.nero.socialmedia.analysis.instagram.domain.Setting;
-import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
 import com.nero.socialmedia.analysis.instagram.repositories.SettingRepository;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,37 +16,40 @@ import java.util.stream.Collectors;
 
 @Service
 public class SettingsServiceImpl implements SettingsService {
-    private static Logger log = CustomLoggerFactory.getLogger(SettingsServiceImpl.class);
 
     private final SettingRepository settingRepository;
     private final SettingsConfiguration settingsConfiguration;
+    private final TransactionService transactionService;
 
     public SettingsServiceImpl(@Autowired SettingRepository settingRepository,
-                               @Autowired SettingsConfiguration settingsConfiguration) {
+                               @Autowired SettingsConfiguration settingsConfiguration,
+                               @Autowired EntityManagerFactory entityManagerFactory,
+                               @Autowired TransactionService transactionService) {
         this.settingRepository = settingRepository;
         this.settingsConfiguration = settingsConfiguration;
+        this.transactionService = transactionService;
     }
 
     @Override
-    @Transactional
-    public SettingsModel updateSettings(SettingsModel settingsModel) {
-        settingRepository.deleteAll();
-        List<Setting> settings = new ArrayList<>();
-        settings.add(create(settingsConfiguration.getGoogleDriveUsername().getFieldName(),
-                settingsModel.getGoogleDriveUsername(),
-                settingsConfiguration.getGoogleDriveUsername().isMultiple()));
-        settings.add(create(settingsConfiguration.getGoogleDrivePassword().getFieldName(),
-                settingsModel.getGoogleDrivePassword(),
-                settingsConfiguration.getGoogleDrivePassword().isMultiple()));
-        settings.add(create(settingsConfiguration.getGoogleDriveFilepath().getFieldName(),
-                settingsModel.getGoogleDriveFilepath(),
-                settingsConfiguration.getGoogleDriveFilepath().isMultiple()));
-        settings.addAll(settingsModel.getInstagramAccountsToTrack().stream()
-                .map(accountToTrack -> create(settingsConfiguration.getInstagramAccountsToTrack().getFieldName(),
-                        accountToTrack, settingsConfiguration.getInstagramAccountsToTrack().isMultiple()))
-                .collect(Collectors.toList()));
-        settingRepository.saveAll(settings);
-        return getSettings();
+    public void updateSettings(SettingsModel settingsModel) {
+        transactionService.runTransaction(() -> {
+            settingRepository.deleteAll();
+            List<Setting> settings = new ArrayList<>();
+            settings.add(create(settingsConfiguration.getGoogleDriveUsername().getFieldName(),
+                    settingsModel.getGoogleDriveUsername(),
+                    settingsConfiguration.getGoogleDriveUsername().isMultiple()));
+            settings.add(create(settingsConfiguration.getGoogleDrivePassword().getFieldName(),
+                    settingsModel.getGoogleDrivePassword(),
+                    settingsConfiguration.getGoogleDrivePassword().isMultiple()));
+            settings.add(create(settingsConfiguration.getGoogleDriveFilepath().getFieldName(),
+                    settingsModel.getGoogleDriveFilepath(),
+                    settingsConfiguration.getGoogleDriveFilepath().isMultiple()));
+            settings.addAll(settingsModel.getInstagramAccountsToTrack().stream()
+                    .map(accountToTrack -> create(settingsConfiguration.getInstagramAccountsToTrack().getFieldName(),
+                            accountToTrack, settingsConfiguration.getInstagramAccountsToTrack().isMultiple()))
+                    .collect(Collectors.toList()));
+            return settingRepository.saveAll(settings);
+        });
     }
 
     @Override

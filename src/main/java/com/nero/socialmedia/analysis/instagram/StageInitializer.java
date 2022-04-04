@@ -3,36 +3,51 @@ package com.nero.socialmedia.analysis.instagram;
 import com.nero.socialmedia.analysis.instagram.configuration.StageConfiguration;
 import com.nero.socialmedia.analysis.instagram.events.StageReadyEvent;
 import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
+import com.nero.socialmedia.analysis.instagram.services.ResourceService;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     private static final Logger log = CustomLoggerFactory.getLogger(StageInitializer.class);
 
-    private final ConfigurableApplicationContext appContext;
     private final StageConfiguration stageConfiguration;
+    private final ResourceService resourceService;
+    private final ApplicationContext applicationContext;
 
     private Stage stage;
 
-    public StageInitializer(@Autowired ConfigurableApplicationContext appContext,
-                            @Autowired StageConfiguration stageConfiguration) {
-        this.appContext = appContext;
+    public StageInitializer(@Autowired StageConfiguration stageConfiguration,
+                            @Autowired ResourceService resourceService,
+                            @Autowired ApplicationContext applicationContext) {
         this.stageConfiguration = stageConfiguration;
+        this.resourceService = resourceService;
+        this.applicationContext = applicationContext;
     }
 
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
-//        Parent parent;
-
-        stage = event.getStage();
-        stage.setTitle(stageConfiguration.getTitle());
-//        stage.setScene(new Scene(parent, 800,800));
-        stage.show();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(resourceService.getFxmlHomeResource().getURL());
+            fxmlLoader.setControllerFactory(applicationContext::getBean);
+            Parent parent = fxmlLoader.load();
+            stage = event.getStage();
+            stage.setTitle(stageConfiguration.getTitle());
+            stage.setScene(new Scene(parent, 800,800));
+            stage.show();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     public Stage getStage() {

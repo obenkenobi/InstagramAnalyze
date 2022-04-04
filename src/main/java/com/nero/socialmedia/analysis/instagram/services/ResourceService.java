@@ -4,5 +4,5 @@ import org.springframework.core.io.Resource;
 
 public interface ResourceService {
     Resource getIconsTrayResource();
-    Resource getFxmlSettingsResource();
+    Resource getFxmlHomeResource();
 }

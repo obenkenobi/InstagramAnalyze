@@ -8,8 +8,8 @@ import java.util.Set;
 @Entity(name = "calc_job")
 public class CalcJob {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "calc_frequency", length = 30, nullable = false)

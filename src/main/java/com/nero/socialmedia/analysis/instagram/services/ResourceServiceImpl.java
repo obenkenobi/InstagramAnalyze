@@ -10,8 +10,8 @@ public class ResourceServiceImpl implements ResourceService {
     @Value("classpath:/icons/tray.png")
     private Resource iconsTrayResource;
 
-    @Value("classpath:/fxml/settings.fxml")
-    private Resource fxmlSettingsResource;
+    @Value("classpath:/fxml/home.fxml")
+    private Resource fxmlHomeResource;
 
     @Override
     public Resource getIconsTrayResource() {
@@ -19,7 +19,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Resource getFxmlSettingsResource() {
-        return fxmlSettingsResource;
+    public Resource getFxmlHomeResource() {
+        return fxmlHomeResource;
     }
 }
