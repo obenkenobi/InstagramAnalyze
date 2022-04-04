@@ -28,6 +28,7 @@ public class TrayIconComponent extends TrayIcon {
             this.tray.add(this);
         } catch (AWTException e) {
             log.error(e.getMessage());
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
