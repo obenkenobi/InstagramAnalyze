@@ -1,18 +1,8 @@
 package com.nero.socialmedia.analysis.instagram.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity(name = "follower")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@SuperBuilder
 public class Follower {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -29,4 +19,35 @@ public class Follower {
     @JoinColumn(name="calc_job_id", nullable=false)
     private CalcJob calcJob;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFollowerAccountName() {
+        return followerAccountName;
+    }
+
+    public void setFollowerAccountName(String followerAccountName) {
+        this.followerAccountName = followerAccountName;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public CalcJob getCalcJob() {
+        return calcJob;
+    }
+
+    public void setCalcJob(CalcJob calcJob) {
+        this.calcJob = calcJob;
+    }
 }

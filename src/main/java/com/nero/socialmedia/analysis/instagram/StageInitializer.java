@@ -1,42 +1,42 @@
 package com.nero.socialmedia.analysis.instagram;
 
-import com.nero.socialmedia.analysis.instagram.configuration.GuiConfiguration;
+import com.nero.socialmedia.analysis.instagram.configuration.StageConfiguration;
 import com.nero.socialmedia.analysis.instagram.events.StageReadyEvent;
-import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StageInitializer implements ApplicationListener<StageReadyEvent> {
+    private static final Logger log = CustomLoggerFactory.getLogger(StageInitializer.class);
 
     private final ConfigurableApplicationContext appContext;
-    private final GuiConfiguration guiConfiguration;
+    private final StageConfiguration stageConfiguration;
 
-    @Getter
     private Stage stage;
 
-    // State
-    @Getter @Setter
-    private SettingsModel settingsModel;
+    public StageInitializer(@Autowired ConfigurableApplicationContext appContext,
+                            @Autowired StageConfiguration stageConfiguration) {
+        this.appContext = appContext;
+        this.stageConfiguration = stageConfiguration;
+    }
 
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
 //        Parent parent;
 
         stage = event.getStage();
-        stage.setTitle(guiConfiguration.getTitle());
+        stage.setTitle(stageConfiguration.getTitle());
 //        stage.setScene(new Scene(parent, 800,800));
         stage.show();
     }
+
+    public Stage getStage() {
+        return stage;
+    }
+
 }

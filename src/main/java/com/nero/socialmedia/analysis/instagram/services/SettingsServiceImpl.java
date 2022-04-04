@@ -2,10 +2,10 @@ package com.nero.socialmedia.analysis.instagram.services;
 
 import com.nero.socialmedia.analysis.instagram.configuration.SettingsConfiguration;
 import com.nero.socialmedia.analysis.instagram.domain.Setting;
+import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
 import com.nero.socialmedia.analysis.instagram.repositories.SettingRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +16,19 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SettingsServiceImpl implements SettingsService {
+    private static Logger log = CustomLoggerFactory.getLogger(SettingsServiceImpl.class);
+
     private final SettingRepository settingRepository;
     private final SettingsConfiguration settingsConfiguration;
-    
+
+    public SettingsServiceImpl(@Autowired SettingRepository settingRepository,
+                               @Autowired SettingsConfiguration settingsConfiguration) {
+        this.settingRepository = settingRepository;
+        this.settingsConfiguration = settingsConfiguration;
+    }
+
     @Override
     @Transactional
     public SettingsModel updateSettings(SettingsModel settingsModel) {
@@ -52,24 +58,28 @@ public class SettingsServiceImpl implements SettingsService {
                 .collect(Collectors.toMap(Setting::getFieldName, Function.identity()));
         Map<String, List<Setting>> multipleSettings = settingList.stream().filter(Setting::isMultiple)
                 .collect(Collectors.groupingBy(Setting::getFieldName));
-        return SettingsModel.builder()
-                .googleDriveUsername(getSingleSettingValue(singleSettings,
-                        settingsConfiguration.getGoogleDriveUsername().getFieldName()))
-                .googleDrivePassword(getSingleSettingValue(singleSettings,
-                        settingsConfiguration.getGoogleDrivePassword().getFieldName()))
-                .googleDriveFilepath(getSingleSettingValue(singleSettings,
-                        settingsConfiguration.getGoogleDriveFilepath().getFieldName()))
-                .instagramAccountsToTrack(getMultiSettingValue(multipleSettings,
-                        settingsConfiguration.getInstagramAccountsToTrack().getFieldName()))
-                .build();
+        SettingsModel settingsModel = new SettingsModel();
+        settingsModel.setGoogleDriveUsername(getSingleSettingValue(singleSettings,
+                settingsConfiguration.getGoogleDriveUsername().getFieldName()));
+        settingsModel.setGoogleDrivePassword(getSingleSettingValue(singleSettings,
+                settingsConfiguration.getGoogleDrivePassword().getFieldName()));
+        settingsModel.setGoogleDriveFilepath(getSingleSettingValue(singleSettings,
+                settingsConfiguration.getGoogleDriveFilepath().getFieldName()));
+        settingsModel.setInstagramAccountsToTrack(getMultiSettingValue(multipleSettings,
+                settingsConfiguration.getInstagramAccountsToTrack().getFieldName()));
+        return settingsModel;
     }
 
     private Setting create(String fieldName, String value, boolean isMultiple) {
-        return Setting.builder().fieldName(fieldName).value(value).multiple(isMultiple).build();
+        Setting setting = new Setting();
+        setting.setFieldName(fieldName);
+        setting.setMultiple(isMultiple);
+        setting.setValue(value);
+        return setting;
     }
 
     private String getSingleSettingValue(Map<String, Setting> singleSettings, String fieldName) {
-        return singleSettings.getOrDefault(fieldName, Setting.builder().build()).getValue();
+        return singleSettings.getOrDefault(fieldName, new Setting()).getValue();
     }
 
     private List<String> getMultiSettingValue(Map<String, List<Setting>> multipleSettings, String fieldName) {

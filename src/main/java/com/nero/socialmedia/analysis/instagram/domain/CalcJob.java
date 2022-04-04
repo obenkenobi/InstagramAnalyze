@@ -1,20 +1,11 @@
 package com.nero.socialmedia.analysis.instagram.domain;
 
 import com.nero.socialmedia.analysis.instagram.constants.CalcFrequency;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity(name = "calc_job")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@SuperBuilder
 public class CalcJob {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -30,4 +21,36 @@ public class CalcJob {
 
     @OneToMany(mappedBy="calcJob", fetch = FetchType.EAGER)
     private Set<Follower> followers;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public CalcFrequency getCalcFrequency() {
+        return calcFrequency;
+    }
+
+    public void setCalcFrequency(CalcFrequency calcFrequency) {
+        this.calcFrequency = calcFrequency;
+    }
+
+    public int getJobTime() {
+        return jobTime;
+    }
+
+    public void setJobTime(int jobTime) {
+        this.jobTime = jobTime;
+    }
+
+    public Set<Follower> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<Follower> followers) {
+        this.followers = followers;
+    }
 }

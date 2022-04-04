@@ -1,8 +1,5 @@
 package com.nero.socialmedia.analysis.instagram.configuration;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
@@ -10,18 +7,62 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "settings")
 @Component
 @RefreshScope
-@Data
 public class SettingsConfiguration {
     private SettingField googleDriveUsername;
     private SettingField googleDrivePassword;
     private SettingField googleDriveFilepath;
     private SettingField instagramAccountsToTrack;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
+    public SettingField getGoogleDriveUsername() {
+        return googleDriveUsername;
+    }
+
+    public void setGoogleDriveUsername(SettingField googleDriveUsername) {
+        this.googleDriveUsername = googleDriveUsername;
+    }
+
+    public SettingField getGoogleDrivePassword() {
+        return googleDrivePassword;
+    }
+
+    public void setGoogleDrivePassword(SettingField googleDrivePassword) {
+        this.googleDrivePassword = googleDrivePassword;
+    }
+
+    public SettingField getGoogleDriveFilepath() {
+        return googleDriveFilepath;
+    }
+
+    public void setGoogleDriveFilepath(SettingField googleDriveFilepath) {
+        this.googleDriveFilepath = googleDriveFilepath;
+    }
+
+    public SettingField getInstagramAccountsToTrack() {
+        return instagramAccountsToTrack;
+    }
+
+    public void setInstagramAccountsToTrack(SettingField instagramAccountsToTrack) {
+        this.instagramAccountsToTrack = instagramAccountsToTrack;
+    }
+
     public static class SettingField {
         private String fieldName;
         private boolean multiple = false;
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+
+        public boolean isMultiple() {
+            return multiple;
+        }
+
+        public void setMultiple(boolean multiple) {
+            this.multiple = multiple;
+        }
     }
 }

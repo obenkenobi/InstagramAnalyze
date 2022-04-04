@@ -1,15 +1,42 @@
 package com.nero.socialmedia.analysis.instagram.models;
 
-import lombok.Data;
-import lombok.experimental.SuperBuilder;
-
 import java.util.List;
 
-@Data
-@SuperBuilder
 public class SettingsModel {
     private String googleDriveUsername;
     private String googleDrivePassword;
     private String googleDriveFilepath;
     private List<String> instagramAccountsToTrack;
+
+    public String getGoogleDriveUsername() {
+        return googleDriveUsername;
+    }
+
+    public void setGoogleDriveUsername(String googleDriveUsername) {
+        this.googleDriveUsername = googleDriveUsername;
+    }
+
+    public String getGoogleDrivePassword() {
+        return googleDrivePassword;
+    }
+
+    public void setGoogleDrivePassword(String googleDrivePassword) {
+        this.googleDrivePassword = googleDrivePassword;
+    }
+
+    public String getGoogleDriveFilepath() {
+        return googleDriveFilepath;
+    }
+
+    public void setGoogleDriveFilepath(String googleDriveFilepath) {
+        this.googleDriveFilepath = googleDriveFilepath;
+    }
+
+    public List<String> getInstagramAccountsToTrack() {
+        return instagramAccountsToTrack;
+    }
+
+    public void setInstagramAccountsToTrack(List<String> instagramAccountsToTrack) {
+        this.instagramAccountsToTrack = instagramAccountsToTrack;
+    }
 }

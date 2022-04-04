@@ -7,6 +7,7 @@ server:
 spring:
   main:
     web-application-type: none
+    allow-circular-references: true
   jpa:
     database-platform: com.nero.socialmedia.analysis.instagram.configuration.dialect.SQLDialect
     hibernate:
@@ -34,10 +35,11 @@ settings:
     fieldName: instagram-accounts-to-track
     multiple: true
 
-gui:
-  title: Instagram Analyze
-tray:
-  openMenuItemLabel: Open
-  exitMenuItemLabel: Exit
-  tooltip: Running instagram analyze application
+ui:
+  stage:
+    title: Instagram Analyze
+  tray:
+    openMenuItemLabel: Open
+    exitMenuItemLabel: Exit
+    tooltip: Running instagram analyze application
 
