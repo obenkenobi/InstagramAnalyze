@@ -20,7 +20,6 @@ public class ExitApplicationServiceImpl implements ExitApplicationService {
 
     @Override
     public void exitApplication() {
-        final int exitCode = 0;
         trayIconComponent.getTray().remove(trayIconComponent);
         applicationContext.close();
         Platform.exit();
