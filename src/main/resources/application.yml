@@ -10,7 +10,7 @@ spring:
     allow-circular-references: true
   jpa:
     show-sql: true
-    database-platform: com.nero.socialmedia.analysis.instagram.configuration.dialect.SQLDialect
+    database-platform: com.nero.socialmedia.analysis.instagram.configuration.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update
   datasource:
