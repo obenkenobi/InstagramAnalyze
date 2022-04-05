@@ -45,8 +45,6 @@ public class SettingsController {
         SettingsModel settingsModel = new SettingsModel();
         settingsModel.setInstagramAccountsToTrack(Arrays.asList("t1", "t2"));
         settingsModel.setGoogleDriveFilepath("folder/subfolder");
-        settingsModel.setGoogleDriveUsername("testUname");
-        settingsModel.setGoogleDrivePassword("testPassword");
         settingsService.updateSettings(settingsModel);
         loadSettings();
     }

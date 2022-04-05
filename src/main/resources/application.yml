@@ -18,19 +18,11 @@ spring:
     driver-class-name: org.sqlite.JDBC
     username: sa
     password: sa
-#    hikari:
-#      maximum-pool-size: 1
   sql:
     init:
       mode: always
 
 settings:
-  googleDriveUsername:
-    fieldName: google-drive-username
-    multiple: false
-  googleDrivePassword:
-    fieldName: google-drive-password
-    multiple: false
   googleDriveFilepath:
     fieldName: google-drive-filepath
     multiple: false

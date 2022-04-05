@@ -8,26 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RefreshScope
 public class SettingsConfiguration {
-    private SettingField googleDriveUsername;
-    private SettingField googleDrivePassword;
     private SettingField googleDriveFilepath;
     private SettingField instagramAccountsToTrack;
-
-    public SettingField getGoogleDriveUsername() {
-        return googleDriveUsername;
-    }
-
-    public void setGoogleDriveUsername(SettingField googleDriveUsername) {
-        this.googleDriveUsername = googleDriveUsername;
-    }
-
-    public SettingField getGoogleDrivePassword() {
-        return googleDrivePassword;
-    }
-
-    public void setGoogleDrivePassword(SettingField googleDrivePassword) {
-        this.googleDrivePassword = googleDrivePassword;
-    }
 
     public SettingField getGoogleDriveFilepath() {
         return googleDriveFilepath;

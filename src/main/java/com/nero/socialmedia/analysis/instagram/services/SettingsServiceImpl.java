@@ -35,12 +35,6 @@ public class SettingsServiceImpl implements SettingsService {
         transactionService.runTransaction(() -> {
             settingRepository.deleteAll();
             List<Setting> settings = new ArrayList<>();
-            settings.add(create(settingsConfiguration.getGoogleDriveUsername().getFieldName(),
-                    settingsModel.getGoogleDriveUsername(),
-                    settingsConfiguration.getGoogleDriveUsername().isMultiple()));
-            settings.add(create(settingsConfiguration.getGoogleDrivePassword().getFieldName(),
-                    settingsModel.getGoogleDrivePassword(),
-                    settingsConfiguration.getGoogleDrivePassword().isMultiple()));
             settings.add(create(settingsConfiguration.getGoogleDriveFilepath().getFieldName(),
                     settingsModel.getGoogleDriveFilepath(),
                     settingsConfiguration.getGoogleDriveFilepath().isMultiple()));
@@ -60,10 +54,6 @@ public class SettingsServiceImpl implements SettingsService {
         Map<String, List<Setting>> multipleSettings = settingList.stream().filter(Setting::isMultiple)
                 .collect(Collectors.groupingBy(Setting::getFieldName));
         SettingsModel settingsModel = new SettingsModel();
-        settingsModel.setGoogleDriveUsername(getSingleSettingValue(singleSettings,
-                settingsConfiguration.getGoogleDriveUsername().getFieldName()));
-        settingsModel.setGoogleDrivePassword(getSingleSettingValue(singleSettings,
-                settingsConfiguration.getGoogleDrivePassword().getFieldName()));
         settingsModel.setGoogleDriveFilepath(getSingleSettingValue(singleSettings,
                 settingsConfiguration.getGoogleDriveFilepath().getFieldName()));
         settingsModel.setInstagramAccountsToTrack(getMultiSettingValue(multipleSettings,
