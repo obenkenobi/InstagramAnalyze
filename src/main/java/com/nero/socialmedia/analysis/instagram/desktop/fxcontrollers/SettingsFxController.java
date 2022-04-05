@@ -1,4 +1,4 @@
-package com.nero.socialmedia.analysis.instagram.controllers;
+package com.nero.socialmedia.analysis.instagram.desktop.fxcontrollers;
 
 import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-public class SettingsController {
-    private static final Logger log = CustomLoggerFactory.getLogger(SettingsController.class);
+public class SettingsFxController {
+    private static final Logger log = CustomLoggerFactory.getLogger(SettingsFxController.class);
 
     private final SettingsService settingsService;
 
@@ -24,7 +24,7 @@ public class SettingsController {
     @FXML
     public TextField testText;
 
-    public SettingsController(@Autowired SettingsService settingsService) {
+    public SettingsFxController(@Autowired SettingsService settingsService) {
         this.settingsService = settingsService;
     }
 

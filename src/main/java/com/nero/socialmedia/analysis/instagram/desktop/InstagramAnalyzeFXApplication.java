@@ -1,5 +1,6 @@
-package com.nero.socialmedia.analysis.instagram;
+package com.nero.socialmedia.analysis.instagram.desktop;
 
+import com.nero.socialmedia.analysis.instagram.InstagramAnalyzeDesktopApplication;
 import com.nero.socialmedia.analysis.instagram.events.StageReadyEvent;
 import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import javafx.application.Application;
@@ -11,15 +12,15 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.List;
 
-public class InstagramAnalyzeGuiApplication extends Application {
-    private static final Logger log = CustomLoggerFactory.getLogger(InstagramAnalyzeGuiApplication.class);
+public class InstagramAnalyzeFXApplication extends Application {
+    private static final Logger log = CustomLoggerFactory.getLogger(InstagramAnalyzeFXApplication.class);
 
     private ConfigurableApplicationContext applicationContext;
 
     @Override
     public void init() {
         List<String> argsList = super.getParameters().getRaw();
-        SpringApplicationBuilder ctxBuilder = new SpringApplicationBuilder(InstagramAnalyzeSpringApplication.class);
+        SpringApplicationBuilder ctxBuilder = new SpringApplicationBuilder(InstagramAnalyzeDesktopApplication.class);
         ctxBuilder.headless(false);
         applicationContext = ctxBuilder.run(argsList.toArray(new String[argsList.size()]));
     }

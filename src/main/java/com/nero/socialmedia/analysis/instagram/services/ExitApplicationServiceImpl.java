@@ -1,6 +1,6 @@
 package com.nero.socialmedia.analysis.instagram.services;
 
-import com.nero.socialmedia.analysis.instagram.tray.TrayIconComponent;
+import com.nero.socialmedia.analysis.instagram.desktop.tray.TrayIconComponent;
 import javafx.application.Platform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;

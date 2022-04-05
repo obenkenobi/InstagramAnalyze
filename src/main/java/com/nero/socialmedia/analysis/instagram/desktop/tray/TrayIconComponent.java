@@ -1,4 +1,4 @@
-package com.nero.socialmedia.analysis.instagram.tray;
+package com.nero.socialmedia.analysis.instagram.desktop.tray;
 
 import com.nero.socialmedia.analysis.instagram.configuration.TrayConfiguration;
 import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;

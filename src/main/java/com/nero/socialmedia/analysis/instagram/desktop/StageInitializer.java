@@ -1,4 +1,4 @@
-package com.nero.socialmedia.analysis.instagram;
+package com.nero.socialmedia.analysis.instagram.desktop;
 
 import com.nero.socialmedia.analysis.instagram.configuration.StageConfiguration;
 import com.nero.socialmedia.analysis.instagram.events.StageReadyEvent;

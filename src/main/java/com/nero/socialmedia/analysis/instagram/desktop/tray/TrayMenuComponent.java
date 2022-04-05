@@ -1,6 +1,6 @@
-package com.nero.socialmedia.analysis.instagram.tray;
+package com.nero.socialmedia.analysis.instagram.desktop.tray;
 
-import com.nero.socialmedia.analysis.instagram.StageInitializer;
+import com.nero.socialmedia.analysis.instagram.desktop.StageInitializer;
 import com.nero.socialmedia.analysis.instagram.configuration.TrayConfiguration;
 import com.nero.socialmedia.analysis.instagram.services.ExitApplicationService;
 import javafx.application.Platform;
