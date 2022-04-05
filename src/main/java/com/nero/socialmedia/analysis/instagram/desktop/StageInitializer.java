@@ -37,7 +37,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(resourceService.getFxmlHomeResource().getURL());
+            FXMLLoader fxmlLoader = new FXMLLoader(resourceService.getFxmlMainResource().getURL());
             fxmlLoader.setControllerFactory(applicationContext::getBean);
             Parent parent = fxmlLoader.load();
             stage = event.getStage();

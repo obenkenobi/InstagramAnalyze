@@ -21,7 +21,7 @@ public class TrayIconComponent extends TrayIcon {
 
     public TrayIconComponent(@Autowired ResourceService resourceService,
                              @Autowired TrayConfiguration trayConfiguration) {
-        super(createImage(resourceService.getIconsTrayResource(), trayConfiguration.getTooltip()),
+        super(createImage(resourceService.getImagesTrayResource(), trayConfiguration.getTooltip()),
                 trayConfiguration.getTooltip());
         this.tray = SystemTray.getSystemTray();
         try {

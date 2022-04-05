@@ -7,19 +7,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResourceServiceImpl implements ResourceService {
 
-    @Value("classpath:/icons/tray.png")
-    private Resource iconsTrayResource;
+    @Value("classpath:/images/tray.png")
+    private Resource imagesTrayResource;
 
-    @Value("classpath:/fxml/home.fxml")
-    private Resource fxmlHomeResource;
+    @Value("classpath:/fxml/main.fxml")
+    private Resource fxmlMainResource;
 
     @Override
-    public Resource getIconsTrayResource() {
-        return iconsTrayResource;
+    public Resource getImagesTrayResource() {
+        return imagesTrayResource;
     }
 
     @Override
-    public Resource getFxmlHomeResource() {
-        return fxmlHomeResource;
+    public Resource getFxmlMainResource() {
+        return fxmlMainResource;
     }
 }

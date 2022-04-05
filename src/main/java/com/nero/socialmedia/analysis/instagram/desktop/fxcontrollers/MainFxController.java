@@ -6,7 +6,9 @@ import com.nero.socialmedia.analysis.instagram.services.SettingsService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,17 +16,23 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-public class SettingsFxController {
-    private static final Logger log = CustomLoggerFactory.getLogger(SettingsFxController.class);
+public class MainFxController {
+    private static final Logger log = CustomLoggerFactory.getLogger(MainFxController.class);
 
     private final SettingsService settingsService;
 
     @FXML
-    public Button testButton;
+    public AnchorPane googleAccountPane;
     @FXML
-    public TextField testText;
+    public AnchorPane settingsPane;
+    @FXML
+    public TextField googleEmailPhoneTextField;
+    @FXML
+    public PasswordField googlePasswordTextField;
+    @FXML
+    public Button googleSignInButton;
 
-    public SettingsFxController(@Autowired SettingsService settingsService) {
+    public MainFxController(@Autowired SettingsService settingsService) {
         this.settingsService = settingsService;
     }
 
@@ -36,7 +44,8 @@ public class SettingsFxController {
 
     public void loadSettings() {
         log.info("load settings");
-        testText.setText("Accounts count:" + settingsService.getSettings().getInstagramAccountsToTrack().size());
+        log.info("{}", settingsService.getSettings());
+//        testText.setText("Accounts count:" + settingsService.getSettings().getInstagramAccountsToTrack().size());
         log.info("settings loaded");
     }
 
@@ -47,5 +56,12 @@ public class SettingsFxController {
         settingsModel.setGoogleDriveFilepath("folder/subfolder");
         settingsService.updateSettings(settingsModel);
         loadSettings();
+    }
+
+    public void signInGoogle(ActionEvent actionEvent) {
+        String googleAccountName = googleEmailPhoneTextField.getText();
+        String googlePassword = googlePasswordTextField.getText();
+        // Todo sign in
+        log.info("Username {} Password {}", googleAccountName, googlePassword);
     }
 }
