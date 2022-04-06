@@ -25,6 +25,11 @@ spring:
 settings:
   googleDriveFilepath:
     fieldName: google-drive-filepath
+    singleDefault: Instagram-Analyze
+    multiple: false
+  localFilePath:
+    fieldName: local-file-path
+    singleDefault: Instagram-Analyze
     multiple: false
   instagramAccountsToTrack:
     fieldName: instagram-accounts-to-track

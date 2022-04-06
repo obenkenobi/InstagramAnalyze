@@ -9,7 +9,16 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 public class SettingsConfiguration {
     private SettingField googleDriveFilepath;
+    private SettingField localFilePath;
     private SettingField instagramAccountsToTrack;
+
+    public SettingField getLocalFilePath() {
+        return localFilePath;
+    }
+
+    public void setLocalFilePath(SettingField localFilePath) {
+        this.localFilePath = localFilePath;
+    }
 
     public SettingField getGoogleDriveFilepath() {
         return googleDriveFilepath;
@@ -28,8 +37,17 @@ public class SettingsConfiguration {
     }
 
     public static class SettingField {
+        private String singleDefault;
         private String fieldName;
         private boolean multiple = false;
+
+        public String getSingleDefault() {
+            return singleDefault;
+        }
+
+        public void setSingleDefault(String singleDefault) {
+            this.singleDefault = singleDefault;
+        }
 
         public String getFieldName() {
             return fieldName;

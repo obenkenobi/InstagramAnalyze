@@ -63,5 +63,6 @@ public class MainFxController {
         String googlePassword = googlePasswordTextField.getText();
         // Todo sign in
         log.info("Username {} Password {}", googleAccountName, googlePassword);
+        updateSettings(actionEvent);
     }
 }
