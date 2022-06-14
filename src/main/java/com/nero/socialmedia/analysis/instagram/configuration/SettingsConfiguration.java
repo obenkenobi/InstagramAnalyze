@@ -8,24 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 @RefreshScope
 public class SettingsConfiguration {
-    private SettingField googleDriveFilepath;
-    private SettingField localFilePath;
+    private SettingField localDirectoryPath;
     private SettingField instagramAccountsToTrack;
 
-    public SettingField getLocalFilePath() {
-        return localFilePath;
+    public SettingField getLocalDirectoryPath() {
+        return localDirectoryPath;
     }
 
-    public void setLocalFilePath(SettingField localFilePath) {
-        this.localFilePath = localFilePath;
-    }
-
-    public SettingField getGoogleDriveFilepath() {
-        return googleDriveFilepath;
-    }
-
-    public void setGoogleDriveFilepath(SettingField googleDriveFilepath) {
-        this.googleDriveFilepath = googleDriveFilepath;
+    public void setLocalDirectoryPath(SettingField localDirectoryPath) {
+        this.localDirectoryPath = localDirectoryPath;
     }
 
     public SettingField getInstagramAccountsToTrack() {

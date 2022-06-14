@@ -23,15 +23,18 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     private final StageConfiguration stageConfiguration;
     private final ResourceService resourceService;
     private final ApplicationContext applicationContext;
+    private final StageAccessor stageAccessor;
 
     private Stage stage;
 
     public StageInitializer(@Autowired StageConfiguration stageConfiguration,
                             @Autowired ResourceService resourceService,
-                            @Autowired ApplicationContext applicationContext) {
+                            @Autowired ApplicationContext applicationContext,
+                            @Autowired StageAccessor stageAccessor) {
         this.stageConfiguration = stageConfiguration;
         this.resourceService = resourceService;
         this.applicationContext = applicationContext;
+        this.stageAccessor = stageAccessor;
     }
 
     @Override
@@ -44,14 +47,11 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             stage.setTitle(stageConfiguration.getTitle());
             stage.setScene(new Scene(parent, 800,800));
             stage.show();
+            stageAccessor.setStage(stage);
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage(), e);
         }
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 
 }

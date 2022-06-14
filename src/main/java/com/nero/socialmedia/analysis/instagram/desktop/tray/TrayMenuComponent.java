@@ -1,7 +1,7 @@
 package com.nero.socialmedia.analysis.instagram.desktop.tray;
 
-import com.nero.socialmedia.analysis.instagram.desktop.StageInitializer;
 import com.nero.socialmedia.analysis.instagram.configuration.TrayConfiguration;
+import com.nero.socialmedia.analysis.instagram.desktop.StageAccessor;
 import com.nero.socialmedia.analysis.instagram.services.ExitApplicationService;
 import javafx.application.Platform;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +12,18 @@ import java.awt.*;
 @Component
 public class TrayMenuComponent {
 
-    private final StageInitializer stageInitializer;
+    private final StageAccessor stageAccessor;
     private final TrayConfiguration trayConfiguration;
     private final ExitApplicationService exitApplicationService;
     private final TrayIconComponent trayIconComponent;
 
     private final PopupMenu popup;
 
-    public TrayMenuComponent(@Autowired StageInitializer stageInitializer,
+    public TrayMenuComponent(@Autowired StageAccessor stageAccessor,
                              @Autowired TrayConfiguration trayConfiguration,
                              @Autowired ExitApplicationService exitApplicationService,
                              @Autowired TrayIconComponent trayIconComponent) {
-        this.stageInitializer = stageInitializer;
+        this.stageAccessor = stageAccessor;
         this.trayConfiguration = trayConfiguration;
         this.exitApplicationService = exitApplicationService;
         this.trayIconComponent = trayIconComponent;
@@ -50,6 +50,6 @@ public class TrayMenuComponent {
     }
 
     private void openConfigurationGui() {
-        Platform.runLater(() -> stageInitializer.getStage().show());
+        Platform.runLater(() -> stageAccessor.getStage().show());
     }
 }

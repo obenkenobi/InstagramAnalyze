@@ -49,4 +49,33 @@ public class Setting {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public static SettingBuilder builder() {
+        return new SettingBuilder();
+    }
+
+    public static class SettingBuilder {
+        private final Setting setting = new Setting();
+
+        private SettingBuilder() {}
+
+        public SettingBuilder multiple(boolean multiple) {
+            setting.setMultiple(multiple);
+            return this;
+        }
+
+        public SettingBuilder fieldName(String fieldName) {
+            setting.setFieldName(fieldName);
+            return this;
+        }
+
+        public SettingBuilder value(String value) {
+            setting.setValue(value);
+            return this;
+        }
+
+        public Setting build() {
+            return setting;
+        }
+    }
 }

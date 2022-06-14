@@ -4,17 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsModel {
-    private String localFilePath = "";
-    private String googleDriveFilepath = "";
+    private String localDirectoryPath = "";
     private List<String> instagramAccountsToTrack = new ArrayList<>();
-
-    public String getGoogleDriveFilepath() {
-        return googleDriveFilepath;
-    }
-
-    public void setGoogleDriveFilepath(String googleDriveFilepath) {
-        this.googleDriveFilepath = googleDriveFilepath;
-    }
 
     public List<String> getInstagramAccountsToTrack() {
         return instagramAccountsToTrack;
@@ -24,11 +15,35 @@ public class SettingsModel {
         this.instagramAccountsToTrack = instagramAccountsToTrack;
     }
 
-    public String getLocalFilePath() {
-        return localFilePath;
+    public String getLocalDirectoryPath() {
+        return localDirectoryPath;
     }
 
-    public void setLocalFilePath(String localFilePath) {
-        this.localFilePath = localFilePath;
+    public void setLocalDirectoryPath(String localDirectoryPath) {
+        this.localDirectoryPath = localDirectoryPath;
+    }
+
+    public static SettingModelBuilder builder() {
+        return new SettingsModel.SettingModelBuilder();
+    }
+
+    public static class SettingModelBuilder {
+        private final SettingsModel settingsModel = new SettingsModel();
+
+        private SettingModelBuilder() {}
+
+        public SettingModelBuilder localDirectoryPath(String localDirectoryPath) {
+            settingsModel.setLocalDirectoryPath(localDirectoryPath);
+            return this;
+        }
+
+        public SettingModelBuilder instagramAccountsToTrack(List<String> instagramAccountsToTrack) {
+            settingsModel.setInstagramAccountsToTrack(instagramAccountsToTrack);
+            return this;
+        }
+
+        public SettingsModel build() {
+            return settingsModel;
+        }
     }
 }

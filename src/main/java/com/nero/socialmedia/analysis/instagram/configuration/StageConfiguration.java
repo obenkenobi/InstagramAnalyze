@@ -2,10 +2,10 @@ package com.nero.socialmedia.analysis.instagram.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 @ConfigurationProperties(prefix = "ui.stage")
-@Component
+@Configuration
 @RefreshScope
 public class StageConfiguration {
     private String title;

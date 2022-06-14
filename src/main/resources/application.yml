@@ -23,11 +23,7 @@ spring:
       mode: always
 
 settings:
-  googleDriveFilepath:
-    fieldName: google-drive-filepath
-    singleDefault: Instagram-Analyze
-    multiple: false
-  localFilePath:
+  localDirectoryPath:
     fieldName: local-file-path
     singleDefault: Instagram-Analyze
     multiple: false

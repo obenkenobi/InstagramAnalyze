@@ -38,12 +38,17 @@ public class SettingsServiceImpl implements SettingsService {
         transactionService.runTransaction(() -> {
             settingRepository.deleteAll();
             List<Setting> settings = new ArrayList<>();
-            settings.add(create(settingsConfiguration.getGoogleDriveFilepath().getFieldName(),
-                    settingsModel.getGoogleDriveFilepath(),
-                    settingsConfiguration.getGoogleDriveFilepath().isMultiple()));
+            settings.add(Setting.builder()
+                    .fieldName(settingsConfiguration.getLocalDirectoryPath().getFieldName())
+                    .value(settingsModel.getLocalDirectoryPath())
+                    .multiple(settingsConfiguration.getLocalDirectoryPath().isMultiple())
+                    .build());
             settings.addAll(settingsModel.getInstagramAccountsToTrack().stream()
-                    .map(accountToTrack -> create(settingsConfiguration.getInstagramAccountsToTrack().getFieldName(),
-                            accountToTrack, settingsConfiguration.getInstagramAccountsToTrack().isMultiple()))
+                    .map(accountToTrack -> Setting.builder()
+                            .fieldName(settingsConfiguration.getInstagramAccountsToTrack().getFieldName())
+                            .value(accountToTrack)
+                            .multiple(settingsConfiguration.getInstagramAccountsToTrack().isMultiple())
+                            .build())
                     .collect(Collectors.toList()));
             return settingRepository.saveAll(settings);
         });
@@ -56,25 +61,14 @@ public class SettingsServiceImpl implements SettingsService {
                 .collect(Collectors.toMap(Setting::getFieldName, Function.identity()));
         Map<String, List<Setting>> multipleSettings = settingList.stream().filter(Setting::isMultiple)
                 .collect(Collectors.groupingBy(Setting::getFieldName));
-        SettingsModel settingsModel = new SettingsModel();
-        settingsModel.setGoogleDriveFilepath(getSingleSettingValue(singleSettings,
-                settingsConfiguration.getGoogleDriveFilepath().getFieldName(),
-                settingsConfiguration.getGoogleDriveFilepath().getSingleDefault()));
-        settingsModel.setLocalFilePath(getSingleSettingValue(singleSettings,
-                settingsConfiguration.getGoogleDriveFilepath().getFieldName(),
-                Paths.get(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),
-                        settingsConfiguration.getLocalFilePath().getSingleDefault()).toString()));
-        settingsModel.setInstagramAccountsToTrack(getMultiSettingValue(multipleSettings,
-                settingsConfiguration.getInstagramAccountsToTrack().getFieldName()));
-        return settingsModel;
-    }
-
-    private Setting create(String fieldName, String value, boolean isMultiple) {
-        Setting setting = new Setting();
-        setting.setFieldName(fieldName);
-        setting.setMultiple(isMultiple);
-        setting.setValue(value);
-        return setting;
+        return SettingsModel.builder()
+                .localDirectoryPath(getSingleSettingValue(singleSettings,
+                        settingsConfiguration.getLocalDirectoryPath().getFieldName(),
+                        Paths.get(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),
+                                settingsConfiguration.getLocalDirectoryPath().getSingleDefault()).toString()))
+                .instagramAccountsToTrack(getMultiSettingValue(multipleSettings,
+                        settingsConfiguration.getInstagramAccountsToTrack().getFieldName()))
+                .build();
     }
 
     private String getSingleSettingValue(Map<String, Setting> singleSettings, String fieldName) {
