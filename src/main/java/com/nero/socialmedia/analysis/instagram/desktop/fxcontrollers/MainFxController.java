@@ -1,6 +1,7 @@
 package com.nero.socialmedia.analysis.instagram.desktop.fxcontrollers;
 
 import com.nero.socialmedia.analysis.instagram.constants.CalcFrequency;
+import com.nero.socialmedia.analysis.instagram.constants.ProfileNames;
 import com.nero.socialmedia.analysis.instagram.desktop.StageAccessor;
 import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -29,6 +31,7 @@ public class MainFxController {
     // Autowired
     private final SettingsService settingsService;
     private final StageAccessor stageAccessor;
+    private final Environment environment;
 
     // UI components
     @FXML public TextField directorySaveLocationTextField;
@@ -38,19 +41,25 @@ public class MainFxController {
     @FXML public CheckBox calcFreqWeeklyCheckBox;
     @FXML public CheckBox calcFreqDailyCheckBox;
     @FXML public CheckBox calcFreqHourlyCheckBox;
-    @FXML public CheckBox calcFreqTenSecondsCheckBox;
     @FXML public CheckBox calcFreqMinutelyCheckBox;
+    @FXML public CheckBox calcFreqTenSecondsCheckBox;
 
     // State
     private SettingsModel settingsModel = new SettingsModel();
 
-    public MainFxController(@Autowired SettingsService settingsService, @Autowired StageAccessor stageAccessor) {
+    public MainFxController(@Autowired SettingsService settingsService, @Autowired StageAccessor stageAccessor,
+                            @Autowired Environment environment) {
         this.settingsService = settingsService;
         this.stageAccessor = stageAccessor;
+        this.environment = environment;
     }
 
     @FXML
     public void initialize() {
+        Set<String> profiles = Arrays.stream(environment.getActiveProfiles()).collect(Collectors.toSet());
+        boolean isDev = profiles.contains(ProfileNames.DEV);
+        calcFreqTenSecondsCheckBox.setVisible(isDev && profiles.contains(ProfileNames.SCHEDULE_TEN_SECONDS));
+        calcFreqMinutelyCheckBox.setVisible(isDev && profiles.contains(ProfileNames.SCHEDULE_MINUTELY));
         loadSettings();
     }
 
