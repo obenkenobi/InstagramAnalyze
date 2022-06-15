@@ -1,6 +1,7 @@
 package com.nero.socialmedia.analysis.instagram.services;
 
 import com.nero.socialmedia.analysis.instagram.configuration.SettingsConfiguration;
+import com.nero.socialmedia.analysis.instagram.constants.CalcFrequency;
 import com.nero.socialmedia.analysis.instagram.domain.Setting;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
 import com.nero.socialmedia.analysis.instagram.repositories.SettingRepository;
@@ -11,9 +12,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManagerFactory;
 import javax.swing.filechooser.FileSystemView;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,6 +49,12 @@ public class SettingsServiceImpl implements SettingsService {
                             .multiple(settingsConfiguration.getInstagramAccountsToTrack().isMultiple())
                             .build())
                     .collect(Collectors.toList()));
+            settings.addAll(settingsModel.getCalculationFrequencies().stream()
+                    .map(calcFrequency -> Setting.builder()
+                            .fieldName(settingsConfiguration.getCalculationFrequency().getFieldName())
+                            .value(String.valueOf(calcFrequency))
+                            .multiple(settingsConfiguration.getCalculationFrequency().isMultiple())
+                            .build()).collect(Collectors.toList()));
             return settingRepository.saveAll(settings);
         });
     }
@@ -61,13 +66,26 @@ public class SettingsServiceImpl implements SettingsService {
                 .collect(Collectors.toMap(Setting::getFieldName, Function.identity()));
         Map<String, List<Setting>> multipleSettings = settingList.stream().filter(Setting::isMultiple)
                 .collect(Collectors.groupingBy(Setting::getFieldName));
+        Set<String> calcFrequenciesValues = Arrays.stream(CalcFrequency.values())
+                .map(CalcFrequency::toString)
+                .collect(Collectors.toSet());
+
+        String localDirectoryPath = getSingleSettingValue(singleSettings,
+                settingsConfiguration.getLocalDirectoryPath().getFieldName(),
+                Paths.get(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),
+                        settingsConfiguration.getLocalDirectoryPath().getSingleDefault()).toString());
+        Set<String> instagramAccountsToTrack = getMultiSettingValueAsSet(multipleSettings,
+                settingsConfiguration.getInstagramAccountsToTrack().getFieldName());
+        Set<CalcFrequency> calculationFrequencies = getMultiSettingValueAsList(multipleSettings,
+                settingsConfiguration.getCalculationFrequency().getFieldName())
+                .stream()
+                .filter(calcFrequenciesValues::contains)
+                .map(CalcFrequency::valueOf)
+                .collect(Collectors.toSet());
         return SettingsModel.builder()
-                .localDirectoryPath(getSingleSettingValue(singleSettings,
-                        settingsConfiguration.getLocalDirectoryPath().getFieldName(),
-                        Paths.get(FileSystemView.getFileSystemView().getDefaultDirectory().getPath(),
-                                settingsConfiguration.getLocalDirectoryPath().getSingleDefault()).toString()))
-                .instagramAccountsToTrack(getMultiSettingValue(multipleSettings,
-                        settingsConfiguration.getInstagramAccountsToTrack().getFieldName()))
+                .localDirectoryPath(localDirectoryPath)
+                .instagramAccountsToTrack(instagramAccountsToTrack)
+                .calculationFrequencies(calculationFrequencies)
                 .build();
     }
 
@@ -80,7 +98,12 @@ public class SettingsServiceImpl implements SettingsService {
         return setting != null && StringUtils.hasText(setting.getValue()) ? setting.getValue() : defaultValue;
     }
 
-    private List<String> getMultiSettingValue(Map<String, List<Setting>> multipleSettings, String fieldName) {
+    private Set<String> getMultiSettingValueAsSet(Map<String, List<Setting>> multipleSettings, String fieldName) {
+        return multipleSettings.getOrDefault(fieldName, new ArrayList<>()).stream()
+                .map(Setting::getValue).collect(Collectors.toSet());
+    }
+
+    private List<String> getMultiSettingValueAsList(Map<String, List<Setting>> multipleSettings, String fieldName) {
         return multipleSettings.getOrDefault(fieldName, new ArrayList<>()).stream()
                 .map(Setting::getValue).collect(Collectors.toList());
     }

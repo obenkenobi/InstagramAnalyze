@@ -30,6 +30,9 @@ settings:
   instagramAccountsToTrack:
     fieldName: instagram-accounts-to-track
     multiple: true
+  calculationFrequency:
+    fieldName: calculation-frequency
+    multiple: true
 
 ui:
   stage:

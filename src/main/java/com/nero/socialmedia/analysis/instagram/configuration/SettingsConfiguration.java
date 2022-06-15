@@ -10,6 +10,15 @@ import org.springframework.stereotype.Component;
 public class SettingsConfiguration {
     private SettingField localDirectoryPath;
     private SettingField instagramAccountsToTrack;
+    private SettingField calculationFrequency;
+
+    public SettingField getCalculationFrequency() {
+        return calculationFrequency;
+    }
+
+    public void setCalculationFrequency(SettingField calculationFrequency) {
+        this.calculationFrequency = calculationFrequency;
+    }
 
     public SettingField getLocalDirectoryPath() {
         return localDirectoryPath;

@@ -1,17 +1,30 @@
 package com.nero.socialmedia.analysis.instagram.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.nero.socialmedia.analysis.instagram.constants.CalcFrequency;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class SettingsModel {
     private String localDirectoryPath = "";
-    private List<String> instagramAccountsToTrack = new ArrayList<>();
 
-    public List<String> getInstagramAccountsToTrack() {
+    private Set<String> instagramAccountsToTrack = new HashSet<>();
+
+    private Set<CalcFrequency> calculationFrequencies = new HashSet<>();
+
+    public Set<CalcFrequency> getCalculationFrequencies() {
+        return calculationFrequencies;
+    }
+
+    public void setCalculationFrequencies(Set<CalcFrequency> calculationFrequencies) {
+        this.calculationFrequencies = calculationFrequencies;
+    }
+
+    public Set<String> getInstagramAccountsToTrack() {
         return instagramAccountsToTrack;
     }
 
-    public void setInstagramAccountsToTrack(List<String> instagramAccountsToTrack) {
+    public void setInstagramAccountsToTrack(Set<String> instagramAccountsToTrack) {
         this.instagramAccountsToTrack = instagramAccountsToTrack;
     }
 
@@ -37,8 +50,13 @@ public class SettingsModel {
             return this;
         }
 
-        public SettingModelBuilder instagramAccountsToTrack(List<String> instagramAccountsToTrack) {
+        public SettingModelBuilder instagramAccountsToTrack(Set<String> instagramAccountsToTrack) {
             settingsModel.setInstagramAccountsToTrack(instagramAccountsToTrack);
+            return this;
+        }
+
+        public SettingModelBuilder calculationFrequencies(Set<CalcFrequency> instagramAccountsToTrack) {
+            settingsModel.setCalculationFrequencies(instagramAccountsToTrack);
             return this;
         }
 

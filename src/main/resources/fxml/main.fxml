@@ -32,7 +32,7 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#onClickDirectorySaveLocationBtn" prefHeight="19.0" prefWidth="46.0" text="Open">
+                        <Button mnemonicParsing="false" onAction="#onDirectorySaveLocation" prefHeight="19.0" prefWidth="46.0" text="Open">
                            <HBox.margin>
                               <Insets top="3.0" />
                            </HBox.margin>
@@ -44,7 +44,7 @@
                         </TextField>
                      </children>
                   </HBox>
-                  <HBox prefHeight="25.0" prefWidth="757.0">
+                  <HBox prefHeight="129.0" prefWidth="757.0">
                      <children>
                         <Label prefHeight="20.0" prefWidth="205.0" text="Instagram Accounts To Check">
                            <font>
@@ -56,23 +56,51 @@
                         </Label>
                         <VBox prefHeight="25.0" prefWidth="555.0">
                            <children>
-                              <ListView fx:id="instagramAccountsListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
+                              <ListView fx:id="instagramAccountsListView" editable="true" prefHeight="228.0" prefWidth="339.0" />
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#onAddInstagramAccount" text="Add Account" />
-                                    <TextField fx:id="newInstagramAccountTextField" prefHeight="25.0" prefWidth="420.0" />
-                                 </children></HBox>
+                                    <TextField fx:id="newInstagramAccountTextField" prefHeight="25.0" prefWidth="288.0">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin></TextField>
+                                    <Button mnemonicParsing="false" onAction="#onAddInstagramAccount" text="Add Account">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin></Button>
+                                    <Button mnemonicParsing="false" onAction="#onDeleteSelectedInstagramAccount" text="Delete Selected">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin></Button>
+                                    <Button mnemonicParsing="false" onAction="#onClearInstagramAccounts" text="Clear">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin></HBox>
                            </children>
                         </VBox>
                      </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                   </HBox>
                   <HBox prefHeight="37.0" prefWidth="757.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onSaveSettings" text="Save Settings">
+                        <Button mnemonicParsing="false" onAction="#onSaveChanges" text="Save Changes">
                            <HBox.margin>
-                              <Insets left="300.0" top="4.0" />
+                              <Insets left="300.0" top="14.0" />
                            </HBox.margin>
                         </Button>
+                        <Button mnemonicParsing="false" onAction="#onUndoChanges" text="Undo Changes">
+                           <HBox.margin>
+                              <Insets left="10.0" top="14.0" />
+                           </HBox.margin></Button>
                      </children>
                   </HBox>
                </children>

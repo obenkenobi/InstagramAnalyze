@@ -5,9 +5,7 @@ import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
 import com.nero.socialmedia.analysis.instagram.services.SettingsService;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -18,9 +16,8 @@ import org.springframework.util.StringUtils;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -64,7 +61,7 @@ public class MainFxController {
         log.info("settings loaded");
     }
 
-    public void onClickDirectorySaveLocationBtn(ActionEvent event) {
+    public void onDirectorySaveLocation() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Directory to save data");
         log.info("Current location state");
@@ -77,9 +74,10 @@ public class MainFxController {
         setFileLocationState(selectedDirectory.getAbsolutePath());
     }
 
-    public void onAddInstagramAccount(ActionEvent event) {
+    public void onAddInstagramAccount() {
         String account = newInstagramAccountTextField.getText();
-        List<String> accounts = getInstagramAccountsState();
+        newInstagramAccountTextField.clear();
+        Set<String> accounts = getInstagramAccountsState();
         if (!StringUtils.hasText(account) || accounts.contains(account)) {
             return;
         }
@@ -87,7 +85,23 @@ public class MainFxController {
         setInstagramAccountsState(accounts);
     }
 
-    public void onSaveSettings(ActionEvent actionEvent) {
+    public void onDeleteSelectedInstagramAccount() {
+        Set<String> accountsToRemove = new HashSet<>(instagramAccountsListView.getSelectionModel().getSelectedItems());
+        Set<String> accountsAfterRemoval = getInstagramAccountsState().stream()
+                .filter(a -> !accountsToRemove.contains(a))
+                .collect(Collectors.toSet());
+        setInstagramAccountsState(accountsAfterRemoval);
+    }
+
+    public void onClearInstagramAccounts() {
+        setInstagramAccountsState(new HashSet<>());
+    }
+
+    public void onUndoChanges() {
+        loadSettings();
+    }
+
+    public void onSaveChanges() {
         log.info("Updating settings");
         settingsService.updateSettings(settingsModel);
         loadSettings();
@@ -106,14 +120,15 @@ public class MainFxController {
         return fileLocation;
     }
 
-    private void setInstagramAccountsState(List<String> instagramAccounts) {
+    private void setInstagramAccountsState(Set<String> instagramAccounts) {
         settingsModel.setInstagramAccountsToTrack(instagramAccounts);
         ObservableList<String> items = instagramAccountsListView.getItems();
         items.setAll(instagramAccounts);
+        items.sort(Comparator.comparing(Function.identity()));
         instagramAccountsListView.setItems(items);
     }
 
-    private List<String> getInstagramAccountsState() {
-        return new ArrayList<>(instagramAccountsListView.getItems());
+    private Set<String> getInstagramAccountsState() {
+        return new HashSet<>(instagramAccountsListView.getItems());
     }
 }
