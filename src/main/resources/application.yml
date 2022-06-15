@@ -38,7 +38,7 @@ ui:
   stage:
     title: Instagram Analyze
   tray:
-    openMenuItemLabel: Open
+    openMenuItemLabel: Open Settings
     exitMenuItemLabel: Exit
     tooltip: Running instagram analyze application
 

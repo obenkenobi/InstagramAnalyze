@@ -5,5 +5,6 @@ public enum CalcFrequency {
     MINUTELY,
     HOURLY,
     DAILY,
+    WEEKLY,
     MONTHLY
 }

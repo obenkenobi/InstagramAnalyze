@@ -1,11 +1,13 @@
 package com.nero.socialmedia.analysis.instagram.desktop.fxcontrollers;
 
+import com.nero.socialmedia.analysis.instagram.constants.CalcFrequency;
 import com.nero.socialmedia.analysis.instagram.desktop.StageAccessor;
 import com.nero.socialmedia.analysis.instagram.logger.CustomLoggerFactory;
 import com.nero.socialmedia.analysis.instagram.models.SettingsModel;
 import com.nero.socialmedia.analysis.instagram.services.SettingsService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -29,12 +31,15 @@ public class MainFxController {
     private final StageAccessor stageAccessor;
 
     // UI components
-    @FXML
-    public TextField directorySaveLocationTextField;
-    @FXML
-    public TextField newInstagramAccountTextField;
-    @FXML
-    public ListView<String> instagramAccountsListView;
+    @FXML public TextField directorySaveLocationTextField;
+    @FXML public TextField newInstagramAccountTextField;
+    @FXML public ListView<String> instagramAccountsListView;
+    @FXML public CheckBox calcFreqMonthlyCheckBox;
+    @FXML public CheckBox calcFreqWeeklyCheckBox;
+    @FXML public CheckBox calcFreqDailyCheckBox;
+    @FXML public CheckBox calcFreqHourlyCheckBox;
+    @FXML public CheckBox calcFreqTenSecondsCheckBox;
+    @FXML public CheckBox calcFreqMinutelyCheckBox;
 
     // State
     private SettingsModel settingsModel = new SettingsModel();
@@ -55,7 +60,7 @@ public class MainFxController {
         // State bindings
         setFileLocationState(settingsModel.getLocalDirectoryPath());
         setInstagramAccountsState(settingsModel.getInstagramAccountsToTrack());
-
+        setCalculationFrequenciesState(settingsModel.getCalculationFrequencies());
         log.info("load settings");
         log.info("{}", settingsModel);
         log.info("settings loaded");
@@ -65,7 +70,7 @@ public class MainFxController {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Directory to save data");
         log.info("Current location state");
-        File defaultDirectory = new File(getFileLocationState());
+        File defaultDirectory = new File(directorySaveLocationTextField.getText());
         if (!defaultDirectory.exists())  {
             defaultDirectory = FileSystemView.getFileSystemView().getDefaultDirectory();
         }
@@ -97,6 +102,30 @@ public class MainFxController {
         setInstagramAccountsState(new HashSet<>());
     }
 
+    public void onToggleMonthly() {
+        updateCalculateFrequencies(calcFreqMonthlyCheckBox.isSelected(), CalcFrequency.MONTHLY);
+    }
+
+    public void onToggleWeekly() {
+        updateCalculateFrequencies(calcFreqWeeklyCheckBox.isSelected(), CalcFrequency.WEEKLY);
+    }
+
+    public void onToggleDaily() {
+        updateCalculateFrequencies(calcFreqDailyCheckBox.isSelected(), CalcFrequency.DAILY);
+    }
+
+    public void onToggleHourly() {
+        updateCalculateFrequencies(calcFreqHourlyCheckBox.isSelected(), CalcFrequency.HOURLY);
+    }
+
+    public void onToggleMinutely() {
+        updateCalculateFrequencies(calcFreqMinutelyCheckBox.isSelected(), CalcFrequency.MINUTELY);
+    }
+
+    public void onToggleTenSeconds() {
+        updateCalculateFrequencies(calcFreqTenSecondsCheckBox.isSelected(), CalcFrequency.TEN_SECONDS);
+    }
+
     public void onUndoChanges() {
         loadSettings();
     }
@@ -107,6 +136,16 @@ public class MainFxController {
         loadSettings();
     }
 
+    private void updateCalculateFrequencies(boolean selected, CalcFrequency frequency) {
+        Set<CalcFrequency> calcFrequencies = getCalculationFrequenciesState();
+        if (selected) {
+            calcFrequencies.add(frequency);
+        } else {
+            calcFrequencies.remove(frequency);
+        }
+        setCalculationFrequenciesState(calcFrequencies);
+    }
+
     // State management
 
     private void setFileLocationState(String fileLocation) {
@@ -115,9 +154,7 @@ public class MainFxController {
     }
 
     private String getFileLocationState() {
-        String fileLocation = directorySaveLocationTextField.getText();
-        settingsModel.setLocalDirectoryPath(fileLocation);
-        return fileLocation;
+        return settingsModel.getLocalDirectoryPath();
     }
 
     private void setInstagramAccountsState(Set<String> instagramAccounts) {
@@ -129,6 +166,20 @@ public class MainFxController {
     }
 
     private Set<String> getInstagramAccountsState() {
-        return new HashSet<>(instagramAccountsListView.getItems());
+        return settingsModel.getInstagramAccountsToTrack();
+    }
+
+    private void setCalculationFrequenciesState(Set<CalcFrequency> calculationFrequencies) {
+        settingsModel.setCalculationFrequencies(calculationFrequencies);
+        calcFreqMonthlyCheckBox.setSelected(calculationFrequencies.contains(CalcFrequency.MONTHLY));
+        calcFreqWeeklyCheckBox.setSelected(calculationFrequencies.contains(CalcFrequency.WEEKLY));
+        calcFreqDailyCheckBox.setSelected(calculationFrequencies.contains(CalcFrequency.DAILY));
+        calcFreqHourlyCheckBox.setSelected(calculationFrequencies.contains(CalcFrequency.HOURLY));
+        calcFreqMinutelyCheckBox.setSelected(calculationFrequencies.contains(CalcFrequency.MINUTELY));
+        calcFreqTenSecondsCheckBox.setSelected(calculationFrequencies.contains(CalcFrequency.TEN_SECONDS));
+    }
+
+    private Set<CalcFrequency> getCalculationFrequenciesState() {
+        return settingsModel.getCalculationFrequencies();
     }
 }
